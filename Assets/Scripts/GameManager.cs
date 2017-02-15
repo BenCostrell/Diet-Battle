@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject plate2_p1;
 	public GameObject plate1_p2;
 	public GameObject plate2_p2;
+	private Dictionary<Sprite, Vector3> foodDict;
 
 
 	// Use this for initialization
@@ -41,4 +42,9 @@ public class GameManager : MonoBehaviour {
 		pc.plate1UI = plate1;
 		pc.plate2UI = plate2;
 	}
+
+	void GenerateFood(){
+
+	}
+
 }
