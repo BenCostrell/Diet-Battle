@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour {
 	public float plateOffset;
 	public float plateSpeed;
 	public int platesInHolster;
+	public GameObject plate1UI;
+	public GameObject plate2UI;
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour {
 
 	void ShootPlate(){
 		platesInHolster -= 1;
+		UpdatePlateUI ();
 		float angle = transform.rotation.eulerAngles.z * Mathf.Deg2Rad;
 		Vector3 rotationVector = new Vector3 (Mathf.Cos (angle), Mathf.Sin (angle), 0);
 		Debug.Log (rotationVector);
@@ -52,8 +55,22 @@ public class PlayerController : MonoBehaviour {
 		if (go.tag == "Plate") {
 			if (platesInHolster < 2) {
 				platesInHolster += 1;
+				UpdatePlateUI ();
 				Destroy (go);
 			}
+		}
+	}
+
+	void UpdatePlateUI(){
+		if (platesInHolster == 2) {
+			plate1UI.SetActive (true);
+			plate2UI.SetActive (true);
+		} else if (platesInHolster == 1) {
+			plate1UI.SetActive (true);
+			plate2UI.SetActive (false);
+		} else {
+			plate1UI.SetActive (false);
+			plate2UI.SetActive (false);
 		}
 	}
 
