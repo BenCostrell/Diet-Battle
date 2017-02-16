@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class Food : MonoBehaviour {
 
-	public int fatCalories;
-	public int carbCalories;
-	public int proteinCalories;
-	public enum FoodType {Bread};
-
+	public Nutrition nutrition;
+	private FoodManager foodManager;
 
 	// Use this for initialization
 	void Start () {
@@ -20,11 +17,16 @@ public class Food : MonoBehaviour {
 		
 	}
 
-	void Initialize(int fat, int carbs, int protein, Sprite foodSprite){
-		fatCalories = fat;
-		carbCalories = carbs;
-		proteinCalories = protein;
+	public void Initialize(Sprite foodSprite, Nutrition nutritionFacts, FoodManager fm){
+		nutrition = nutritionFacts;
 		GetComponent<SpriteRenderer> ().sprite = foodSprite;
+		foodManager = fm;
+	}
+
+	public void LoadOntoPlate(Plate plate){
+		transform.SetParent (plate.transform);
+		transform.localPosition = Vector3.zero;
+		foodManager.RemoveFood (this);
 	}
 
 }

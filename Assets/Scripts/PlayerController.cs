@@ -45,7 +45,6 @@ public class PlayerController : MonoBehaviour {
 		UpdatePlateUI ();
 		float angle = transform.rotation.eulerAngles.z * Mathf.Deg2Rad;
 		Vector3 rotationVector = new Vector3 (Mathf.Cos (angle), Mathf.Sin (angle), 0);
-		Debug.Log (rotationVector);
 		GameObject plate = Instantiate (platePrefab, transform.position + (rotationVector * plateOffset), Quaternion.identity);
 		plate.GetComponent<Rigidbody2D> ().velocity = plateSpeed * rotationVector;
 	}
