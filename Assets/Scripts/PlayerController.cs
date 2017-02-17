@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+	private float macroToUIScaleFactor;
 	public int playerNum;
 	public float speed;
 	private Rigidbody2D rb;
@@ -13,11 +14,22 @@ public class PlayerController : MonoBehaviour {
 	public int platesInHolster;
 	public GameObject plate1UI;
 	public GameObject plate2UI;
+	public GameObject fatUI;
+	public GameObject carbUI;
+	public GameObject proteinUI;
+
+	private int fat;
+	private int carbs;
+	private int protein;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();	
 		platesInHolster = 2;
+		fat = 0;
+		carbs = 0;
+		protein = 0;
+		macroToUIScaleFactor = 0.2f;
 	}
 	
 	// Update is called once per frame
@@ -52,6 +64,10 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider){
 		GameObject go = collider.gameObject;
 		if (go.tag == "Plate") {
+			Plate plate = go.GetComponent<Plate> ();
+			if (plate.loaded) {
+				EatFoodOnPlate (plate);
+			}
 			if (platesInHolster < 2) {
 				platesInHolster += 1;
 				UpdatePlateUI ();
@@ -71,6 +87,27 @@ public class PlayerController : MonoBehaviour {
 			plate1UI.SetActive (false);
 			plate2UI.SetActive (false);
 		}
+	}
+
+	void EatFoodOnPlate(Plate plate){
+		Food food = plate.GetComponentInChildren<Food> ();
+		fat += food.nutrition.fatCalories;
+		carbs += food.nutrition.carbCalories;
+		protein += food.nutrition.proteinCalories;
+		UpdateCalorieUI ();
+		plate.loaded = false;
+		Destroy (food.gameObject);
+	}
+
+	public void UpdateCalorieUI(){
+		fatUI.transform.localScale = new Vector3 (1, fat * macroToUIScaleFactor, 1);
+		carbUI.transform.localScale = new Vector3(1, carbs * macroToUIScaleFactor, 1);
+		proteinUI.transform.localScale = new Vector3(1, protein * macroToUIScaleFactor, 1);
+
+		carbUI.transform.position = new Vector3(carbUI.transform.position.x, 
+			fatUI.GetComponent<SpriteRenderer> ().bounds.max.y, carbUI.transform.position.z);
+		proteinUI.transform.position = new Vector3 (proteinUI.transform.position.x, 
+			carbUI.GetComponent<SpriteRenderer> ().bounds.max.y, proteinUI.transform.position.z);
 	}
 
 }

@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour {
 	public GameObject plate1_p2;
 	public GameObject plate2_p2;
 
+	public GameObject calorieUI_p1;
+	public GameObject calorieUI_p2;
+
 
 	// Use this for initialization
 	void Start () {
@@ -30,11 +33,11 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void InitializePlayers(){
-		InitializePlayer (spawnP1, 1, Color.red, plate1_p1, plate2_p1);
-		InitializePlayer (spawnP2, 2, Color.blue, plate1_p2, plate2_p2);
+		InitializePlayer (spawnP1, 1, Color.red, plate1_p1, plate2_p1, calorieUI_p1);
+		InitializePlayer (spawnP2, 2, Color.blue, plate1_p2, plate2_p2, calorieUI_p2);
 	}
 
-	void InitializePlayer(Vector3 spawnLocation, int playerNum, Color spriteColor, GameObject plate1, GameObject plate2){
+	void InitializePlayer(Vector3 spawnLocation, int playerNum, Color spriteColor, GameObject plate1, GameObject plate2, GameObject calorieUI){
 		GameObject player = Instantiate (playerPrefab, spawnLocation, Quaternion.identity) as GameObject;
 		PlayerController pc = player.GetComponent<PlayerController> ();
 		pc.playerNum = playerNum;
@@ -42,5 +45,10 @@ public class GameManager : MonoBehaviour {
 		pc.platePrefab = platePrefab;
 		pc.plate1UI = plate1;
 		pc.plate2UI = plate2;
+		Transform[] macroUIArray = calorieUI.GetComponentsInChildren<Transform> ();
+		pc.fatUI = macroUIArray [1].gameObject;
+		pc.carbUI = macroUIArray [2].gameObject;
+		pc.proteinUI = macroUIArray [3].gameObject;
+		pc.UpdateCalorieUI ();
 	}
 }

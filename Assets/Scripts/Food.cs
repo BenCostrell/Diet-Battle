@@ -6,6 +6,7 @@ public class Food : MonoBehaviour {
 
 	public Nutrition nutrition;
 	private FoodManager foodManager;
+	public bool onPlate;
 
 	// Use this for initialization
 	void Start () {
@@ -21,11 +22,13 @@ public class Food : MonoBehaviour {
 		nutrition = nutritionFacts;
 		GetComponent<SpriteRenderer> ().sprite = foodSprite;
 		foodManager = fm;
+		onPlate = false;
 	}
 
 	public void LoadOntoPlate(Plate plate){
 		transform.SetParent (plate.transform);
 		transform.localPosition = Vector3.zero;
+		onPlate = true;
 		foodManager.RemoveFood (this);
 	}
 

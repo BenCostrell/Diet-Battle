@@ -19,8 +19,11 @@ public class Plate : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider){
 		GameObject go = collider.gameObject;
 		if ((go.tag == "Food") && !loaded) {
-			loaded = true;
-			go.GetComponent<Food> ().LoadOntoPlate (this);
+			Food food = go.GetComponent<Food> ();
+			if (!food.onPlate) {
+				loaded = true;
+				go.GetComponent<Food> ().LoadOntoPlate (this);
+			}
 		}
 	}
 
