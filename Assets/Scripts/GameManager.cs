@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
@@ -19,10 +20,15 @@ public class GameManager : MonoBehaviour {
 	public GameObject calorieUI_p1;
 	public GameObject calorieUI_p2;
 
+	public GameObject bigUIText;
+	public bool gameOver;
+
 
 	// Use this for initialization
 	void Start () {
 		InitializePlayers ();
+		bigUIText.SetActive (false);
+		gameOver = false;
 	}
 	
 	// Update is called once per frame
@@ -53,6 +59,18 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void GameWin(int playerNum){
-		Debug.Log ("Player " + playerNum + " Wins!");
+		bigUIText.SetActive (true);
+		bigUIText.GetComponent<Text> ().text = "PLAYER " + playerNum + " WINS";
+		gameOver = true;
+	}
+
+	public void UnbalancedDietMessage(int playerNum){
+		bigUIText.SetActive (true);
+		bigUIText.GetComponent<Text> ().text = "UNBALANCED DIET";
+		Invoke ("ResetUIText", 1f);
+	}
+
+	void ResetUIText(){
+		bigUIText.SetActive (false);
 	}
 }

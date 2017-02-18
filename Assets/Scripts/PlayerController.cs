@@ -36,30 +36,38 @@ public class PlayerController : MonoBehaviour {
 		fat = 0;
 		carbs = 0;
 		protein = 0;
-		macroToUIScaleFactor = 0.02f;
+		totalCaloriesNeeded = 150;
+		macroToUIScaleFactor = 2f /(totalCaloriesNeeded/3f);
 		timeBetweenCalorieDrain = 2f;
 		calorieDrainRate = 1;
-		totalCaloriesNeeded = 300;
+
 		wiggleRoom = 0.05f;
 		gameManager = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown ("Shoot_P" + playerNum) && (platesInHolster > 0)) {
-			ShootPlate ();
+		if (!gameManager.gameOver) {
+			if (Input.GetButtonDown ("Shoot_P" + playerNum) && (platesInHolster > 0)) {
+				ShootPlate ();
+			}
+			if (timeUntilCalorieDrain > 0) {
+				timeUntilCalorieDrain -= Time.deltaTime;
+			} else {
+				DrainCalories ();
+				timeUntilCalorieDrain = timeBetweenCalorieDrain;
+			}
+			CheckDiet ();
 		}
-		if (timeUntilCalorieDrain > 0) {
-			timeUntilCalorieDrain -= Time.deltaTime;
-		} else {
-			DrainCalories ();
-			timeUntilCalorieDrain = timeBetweenCalorieDrain;
-		}
-		CheckDiet ();
 	}
 
 	void FixedUpdate() {
-		Move ();
+		if (!gameManager.gameOver) {
+			Move ();
+		} else {
+			rb.velocity = Vector2.zero;
+			rb.angularVelocity = 0;
+		}
 	}
 
 	void Move(){
@@ -119,7 +127,7 @@ public class PlayerController : MonoBehaviour {
 				fat = fat / 2;
 				carbs = carbs / 2;
 				protein = protein / 2;
-				Debug.Log ("not balanced enough!");
+				gameManager.UnbalancedDietMessage (playerNum);
 			}
 		}
 	}
