@@ -17,6 +17,13 @@ public class PlayerController : MonoBehaviour {
 	public GameObject fatUI;
 	public GameObject carbUI;
 	public GameObject proteinUI;
+	private int calorieDrainRate;
+	private float timeBetweenCalorieDrain;
+	private float timeUntilCalorieDrain;
+	private int totalCaloriesNeeded;
+	private float wiggleRoom;
+
+	public GameManager gameManager;
 
 	private int fat;
 	private int carbs;
@@ -29,7 +36,12 @@ public class PlayerController : MonoBehaviour {
 		fat = 0;
 		carbs = 0;
 		protein = 0;
-		macroToUIScaleFactor = 0.2f;
+		macroToUIScaleFactor = 0.02f;
+		timeBetweenCalorieDrain = 2f;
+		calorieDrainRate = 1;
+		totalCaloriesNeeded = 300;
+		wiggleRoom = 0.05f;
+		gameManager = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager> ();
 	}
 	
 	// Update is called once per frame
@@ -37,6 +49,13 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetButtonDown ("Shoot_P" + playerNum) && (platesInHolster > 0)) {
 			ShootPlate ();
 		}
+		if (timeUntilCalorieDrain > 0) {
+			timeUntilCalorieDrain -= Time.deltaTime;
+		} else {
+			DrainCalories ();
+			timeUntilCalorieDrain = timeBetweenCalorieDrain;
+		}
+		CheckDiet ();
 	}
 
 	void FixedUpdate() {
@@ -59,6 +78,49 @@ public class PlayerController : MonoBehaviour {
 		Vector3 rotationVector = new Vector3 (Mathf.Cos (angle), Mathf.Sin (angle), 0);
 		GameObject plate = Instantiate (platePrefab, transform.position + (rotationVector * plateOffset), Quaternion.identity);
 		plate.GetComponent<Rigidbody2D> ().velocity = plateSpeed * rotationVector;
+	}
+
+	void DrainCalories(){
+		if (fat > 0) {
+			fat -= calorieDrainRate;
+		}
+		if (carbs > 0) {
+			carbs -= calorieDrainRate;
+		}
+		if (protein > 0) {
+			protein -= calorieDrainRate;
+		}
+		UpdateCalorieUI ();
+	}
+
+	void CheckDiet(){
+		bool balancedDiet = true;
+		int totalCalories = fat + carbs + protein;
+		float oneThird = 1f / 3f;
+		if (totalCalories >= totalCaloriesNeeded) {
+			float fatFloat = fat;
+			float fatProportion = fatFloat / totalCalories;
+			if ((fatProportion < oneThird - wiggleRoom) || (fatProportion > oneThird + wiggleRoom)) {
+				balancedDiet = false;
+			}
+			float carbFloat = carbs;
+			float carbProportion = carbFloat / totalCalories;
+			if ((carbProportion < oneThird - wiggleRoom) || (carbProportion > oneThird + wiggleRoom)) {
+				balancedDiet = false;
+			}
+			float proteinFloat = protein;
+			float proteinProportion = proteinFloat / totalCalories;
+			if ((proteinProportion < oneThird - wiggleRoom) || (proteinProportion > oneThird + wiggleRoom)) {
+				balancedDiet = false;
+			}
+			if (balancedDiet) {
+				gameManager.GameWin (playerNum);
+			} else {
+				fat = fat / 2;
+				carbs = carbs / 2;
+				protein = protein / 2;
+			}
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D collider){
@@ -101,8 +163,8 @@ public class PlayerController : MonoBehaviour {
 
 	public void UpdateCalorieUI(){
 		fatUI.transform.localScale = new Vector3 (1, fat * macroToUIScaleFactor, 1);
-		carbUI.transform.localScale = new Vector3(1, carbs * macroToUIScaleFactor, 1);
-		proteinUI.transform.localScale = new Vector3(1, protein * macroToUIScaleFactor, 1);
+		carbUI.transform.localScale = new Vector3 (1, carbs * macroToUIScaleFactor, 1);
+		proteinUI.transform.localScale = new Vector3 (1, protein * macroToUIScaleFactor, 1);
 
 		carbUI.transform.position = new Vector3(carbUI.transform.position.x, 
 			fatUI.GetComponent<SpriteRenderer> ().bounds.max.y, carbUI.transform.position.z);

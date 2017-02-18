@@ -27,8 +27,9 @@ public class FoodManager : MonoBehaviour {
 
 	void InitializeFoodDict(){
 		foodDict = new Dictionary<Sprite, Nutrition> ();
-		foodDict.Add (foodSprites [0], new Nutrition (0, 1, 0));
-		foodDict.Add (foodSprites [1], new Nutrition (0, 0, 1));
+		foodDict.Add (foodSprites [0], new Nutrition (0, 10, 0));
+		foodDict.Add (foodSprites [1], new Nutrition (0, 0, 10));
+		foodDict.Add (foodSprites [2], new Nutrition (10, 0, 0));
 	}
 
 	void InitializeFoodList(){

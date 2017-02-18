@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Plate
   - Food
+  - GameManager
   layers:
   - Default
   - TransparentFX

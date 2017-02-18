@@ -671,7 +671,7 @@ GameObject:
   - component: {fileID: 1090752321}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1361,6 +1361,7 @@ MonoBehaviour:
   foodSprites:
   - {fileID: 21300000, guid: d7572a57c488b9d40b6322cf351761fb, type: 3}
   - {fileID: 21300000, guid: e99c71e960bb76a40b406fff4c805394, type: 3}
+  - {fileID: 21300000, guid: 52b2321050712d64cb98d73216d3bc02, type: 3}
   xBounds: {x: -25, y: 25}
   yBounds: {x: -15, y: 15}
   minAcceptableDistance: 8

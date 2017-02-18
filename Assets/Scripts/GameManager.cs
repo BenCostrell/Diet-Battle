@@ -51,4 +51,8 @@ public class GameManager : MonoBehaviour {
 		pc.proteinUI = macroUIArray [3].gameObject;
 		pc.UpdateCalorieUI ();
 	}
+
+	public void GameWin(int playerNum){
+		Debug.Log ("Player " + playerNum + " Wins!");
+	}
 }
