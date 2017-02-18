@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour {
 				fat = fat / 2;
 				carbs = carbs / 2;
 				protein = protein / 2;
+				Debug.Log ("not balanced enough!");
 			}
 		}
 	}

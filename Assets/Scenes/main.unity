@@ -1531,7 +1531,7 @@ MonoBehaviour:
   xBounds: {x: -25, y: 25}
   yBounds: {x: -15, y: 15}
   minAcceptableDistance: 8
-  initialNumFood: 5
+  initialNumFood: 6
 --- !u!4 &2137525587
 Transform:
   m_ObjectHideFlags: 0
